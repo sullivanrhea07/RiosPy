@@ -43,16 +43,16 @@ Error generating stack: `+i.message+`
 
 A variable is a name that holds a value. You create one with the = sign.
 
-print() is the function that shows text (or any value) in the output area.`,tasks:[{id:"1",description:"Create a variable called `name` and assign it any string value (text inside quotes).",hint:'name = "Alex"',example:'name = "Alex"',starterCode:`# Create a variable called name
-`,validate:e=>/name\s*=\s*["'].*?["']/.test(e)},{id:"2",description:"Use print() to display a greeting that includes the value of `name`.",hint:'print("Hello, " + name)  or  print(f"Hello, {name}")',example:`name = "Alex"
-print("Hello, " + name)`,starterCode:`name = "Alex"
+print() is the function that shows text (or any value) in the output area.`,tasks:[{id:"1",description:"Create a variable called `name` and assign it any string value (text inside quotes).",hint:'name = "Rio"',example:'name = "Rio"',starterCode:`# Create a variable called name
+`,validate:e=>/name\s*=\s*["'].*?["']/.test(e)},{id:"2",description:"Use print() to display a greeting that includes the value of `name`.",hint:'print("Hello, " + name)  or  print(f"Hello, {name}")',example:`name = "Rio"
+print("Hello, " + name)`,starterCode:`name = "Rio"
 # Print a greeting that uses the name variable
-`,validate:(e,t)=>/print\s*\(/.test(e)&&/hello/i.test(t)&&t.trim().length>0},{id:"3",description:"Create a second variable `age` with an integer value, then print both name and age.",hint:`age = 25
+`,validate:(e,t)=>/print\s*\(/.test(e)&&/hello/i.test(t)&&t.trim().length>0},{id:"3",description:"Create a second variable `age` with an integer value, then print both name and age.",hint:`age = 20
 print(name)
-print(age)`,example:`name = "Alex"
-age = 25
+print(age)`,example:`name = "Rio"
+age = 20
 print(name)
-print(age)`,starterCode:`name = "Alex"
+print(age)`,starterCode:`name = "Rio"
 # Create age and print both variables
 `,validate:(e,t)=>/age\s*=\s*\d+/.test(e)&&/print\s*\(/.test(e)&&t.trim().split(`
 `).length>=2}]},Id={id:"02",title:"Numbers & Math",instructions:`Python can do arithmetic with the usual operators:
