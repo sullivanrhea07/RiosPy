@@ -20,6 +20,7 @@ function App() {
   const [showHint, setShowHint] = useState(false);
   const [showExample, setShowExample] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { loading, error: pyodideError, runPython } = usePyodide();
 
@@ -71,6 +72,7 @@ function App() {
     setCurrentLessonId(id);
     setCurrentTaskIndex(0);
     setCompletedTasks(new Set());
+    setSidebarOpen(false); // close mobile menu after selecting
   };
 
   if (loading) {
@@ -93,11 +95,21 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header
+        showMenuButton
+        onMenuClick={() => setSidebarOpen((o) => !o)}
+      />
+
+      {/* Mobile overlay when sidebar is open */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       <div className="main-layout">
-        {/* Left sidebar – lesson list */}
-        <aside className="sidebar">
+        <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
           <LessonNavigation
             lessons={lessons}
             currentLessonId={currentLessonId}
@@ -105,7 +117,6 @@ function App() {
           />
         </aside>
 
-        {/* Center – instructions + editor */}
         <main className="center">
           <Instructions title={lesson.title} instructions={lesson.instructions} />
           <PythonEditor
@@ -117,7 +128,6 @@ function App() {
           />
         </main>
 
-        {/* Right – tasks + terminal */}
         <aside className="right-panel">
           <TaskPanel
             tasks={lesson.tasks}
