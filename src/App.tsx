@@ -1,0 +1,132 @@
+import { useState, useEffect, useCallback } from 'react';
+import { Header } from './components/Header';
+import { LessonNavigation } from './components/LessonNavigation';
+import { Instructions } from './components/Instructions';
+import { TaskPanel } from './components/TaskPanel';
+import { PythonEditor } from './components/PythonEditor';
+import { Terminal } from './components/Terminal';
+import { lessons } from './lessons';
+import { usePyodide } from './hooks/usePyodide';
+import './App.css';
+
+function App() {
+  const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
+  const [showHint, setShowHint] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const { loading, error: pyodideError, runPython } = usePyodide();
+
+  const lesson = lessons.find((l) => l.id === currentLessonId)!;
+  const task = lesson.tasks[currentTaskIndex];
+
+  // Load starter code when lesson or task changes
+  useEffect(() => {
+    setCode(task.starterCode);
+    setOutput('');
+    setError(null);
+    setSuccessMessage(null);
+    setShowHint(false);
+  }, [currentLessonId, currentTaskIndex, task.starterCode]);
+
+  const handleRun = useCallback(async () => {
+    setIsRunning(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    const result = await runPython(code);
+    setOutput(result.output);
+    setError(result.error);
+
+    if (!result.error && task.validate(code, result.output)) {
+      setCompletedTasks((prev) => new Set(prev).add(task.id));
+      setSuccessMessage('✓ Task completed!');
+    }
+
+    setIsRunning(false);
+  }, [code, runPython, task]);
+
+  const handleReset = () => {
+    setCode(task.starterCode);
+    setOutput('');
+    setError(null);
+    setSuccessMessage(null);
+  };
+
+  const handleSelectLesson = (id: string) => {
+    setCurrentLessonId(id);
+    setCurrentTaskIndex(0);
+    setCompletedTasks(new Set());
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <h2>Loading Python runtime…</h2>
+        <p>This may take a few seconds the first time.</p>
+      </div>
+    );
+  }
+
+  if (pyodideError) {
+    return (
+      <div className="loading-screen">
+        <h2>Failed to load Python</h2>
+        <p>{pyodideError}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="app">
+      <Header />
+
+      <div className="main-layout">
+        {/* Left sidebar – lesson list */}
+        <aside className="sidebar">
+          <LessonNavigation
+            lessons={lessons}
+            currentLessonId={currentLessonId}
+            onSelect={handleSelectLesson}
+          />
+        </aside>
+
+        {/* Center – instructions + editor */}
+        <main className="center">
+          <Instructions title={lesson.title} instructions={lesson.instructions} />
+          <PythonEditor
+            code={code}
+            onChange={setCode}
+            onRun={handleRun}
+            onReset={handleReset}
+            isRunning={isRunning}
+          />
+        </main>
+
+        {/* Right – tasks + terminal */}
+        <aside className="right-panel">
+          <TaskPanel
+            tasks={lesson.tasks}
+            currentTaskIndex={currentTaskIndex}
+            completedTasks={completedTasks}
+            showHint={showHint}
+            onShowHint={() => setShowHint(true)}
+            onNextTask={() => setCurrentTaskIndex((i) => i + 1)}
+          />
+          <Terminal
+            output={output}
+            error={error}
+            successMessage={successMessage}
+          />
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+export default App;
