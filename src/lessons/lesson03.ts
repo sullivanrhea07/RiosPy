@@ -19,6 +19,7 @@ You can also use negative indexes to count from the end:
       id: '1',
       description: 'Create a list called `fruits` that contains at least three string items.',
       hint: 'fruits = ["apple", "banana", "cherry"]',
+      example: `fruits = ["apple", "banana", "cherry"]`,
       starterCode: `# Create a list of fruits\n`,
       validate: (code) => /fruits\s*=\s*\[.*["'].*["'].*\]/.test(code),
     },
@@ -26,6 +27,8 @@ You can also use negative indexes to count from the end:
       id: '2',
       description: 'Print the first item of the list (index 0).',
       hint: 'print(fruits[0])',
+      example: `fruits = ["apple", "banana", "cherry"]
+print(fruits[0])`,
       starterCode: `fruits = ["apple", "banana", "cherry"]\n# Print the first fruit\n`,
       validate: (code, output) =>
         /print\s*\(\s*fruits\s*\[\s*0\s*\]\s*\)/.test(code) &&
@@ -35,6 +38,8 @@ You can also use negative indexes to count from the end:
       id: '3',
       description: 'Print the last item of the list using a negative index.',
       hint: 'print(fruits[-1])',
+      example: `fruits = ["apple", "banana", "cherry"]
+print(fruits[-1])`,
       starterCode: `fruits = ["apple", "banana", "cherry"]\n# Print the last fruit using a negative index\n`,
       validate: (code, output) =>
         /print\s*\(\s*fruits\s*\[\s*-\s*1\s*\]\s*\)/.test(code) &&

@@ -20,6 +20,9 @@ You can combine conditions with  and  /  or  /  not`,
       id: '1',
       description: 'Write an if statement that prints "You are an adult" if the variable `age` is greater than or equal to 18.',
       hint: 'if age >= 18:\n    print("You are an adult")',
+      example: `age = 20
+if age >= 18:
+    print("You are an adult")`,
       starterCode: `age = 20\n# Write an if statement that checks age\n`,
       validate: (code, output) =>
         /if\s+age\s*>=\s*18\s*:/.test(code) &&
@@ -29,6 +32,11 @@ You can combine conditions with  and  /  or  /  not`,
       id: '2',
       description: 'Extend the previous idea: if age >= 18 print "adult", otherwise print "minor".',
       hint: 'if age >= 18:\n    print("adult")\nelse:\n    print("minor")',
+      example: `age = 15
+if age >= 18:
+    print("adult")
+else:
+    print("minor")`,
       starterCode: `age = 15\n# if / else that prints "adult" or "minor"\n`,
       validate: (code, output) =>
         /if\s+age\s*>=\s*18/.test(code) &&
@@ -39,6 +47,13 @@ You can combine conditions with  and  /  or  /  not`,
       id: '3',
       description: 'Check a score. If score >= 90 print "A", elif score >= 80 print "B", else print "C or below".',
       hint: 'Use if / elif / else',
+      example: `score = 85
+if score >= 90:
+    print("A")
+elif score >= 80:
+    print("B")
+else:
+    print("C or below")`,
       starterCode: `score = 85\n# Grade the score\n`,
       validate: (code, output) =>
         /if\s+score\s*>=\s*90/.test(code) &&

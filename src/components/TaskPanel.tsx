@@ -5,7 +5,10 @@ interface Props {
   currentTaskIndex: number;
   completedTasks: Set<string>;
   showHint: boolean;
+  showExample: boolean;
   onShowHint: () => void;
+  onShowExample: () => void;
+  onUseExample: () => void;
   onNextTask: () => void;
 }
 
@@ -14,7 +17,10 @@ export function TaskPanel({
   currentTaskIndex,
   completedTasks,
   showHint,
+  showExample,
   onShowHint,
+  onShowExample,
+  onUseExample,
   onNextTask,
 }: Props) {
   const task = tasks[currentTaskIndex];
@@ -33,10 +39,27 @@ export function TaskPanel({
 
       {showHint && <p className="hint">💡 Hint: {task.hint}</p>}
 
+      {showExample && (
+        <div className="example-box">
+          <div className="example-header">
+            <span>📖 Example solution</span>
+            <button onClick={onUseExample} className="secondary small">
+              Use in editor
+            </button>
+          </div>
+          <pre className="example-code">{task.example}</pre>
+        </div>
+      )}
+
       <div className="task-actions">
         {!showHint && (
           <button onClick={onShowHint} className="secondary">
             Show Hint
+          </button>
+        )}
+        {!showExample && (
+          <button onClick={onShowExample} className="secondary">
+            How to
           </button>
         )}
         {isCompleted && !isLast && (

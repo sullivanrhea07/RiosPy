@@ -18,6 +18,9 @@ You can also change an item by index:  my_list[0] = "new value"`,
       id: '1',
       description: 'Start with the list below. Use .append() to add "orange" to the end, then print the list.',
       hint: 'fruits.append("orange")\nprint(fruits)',
+      example: `fruits = ["apple", "banana", "cherry"]
+fruits.append("orange")
+print(fruits)`,
       starterCode: `fruits = ["apple", "banana", "cherry"]\n# Append "orange" and print the list\n`,
       validate: (code, output) =>
         /\.append\s*\(\s*["']orange["']\s*\)/.test(code) &&
@@ -28,6 +31,9 @@ You can also change an item by index:  my_list[0] = "new value"`,
       id: '2',
       description: 'Use .insert() to put "mango" at the beginning of the list (index 0), then print the list.',
       hint: 'fruits.insert(0, "mango")\nprint(fruits)',
+      example: `fruits = ["apple", "banana", "cherry"]
+fruits.insert(0, "mango")
+print(fruits)`,
       starterCode: `fruits = ["apple", "banana", "cherry"]\n# Insert "mango" at index 0 and print\n`,
       validate: (code, output) =>
         /\.insert\s*\(\s*0\s*,\s*["']mango["']\s*\)/.test(code) &&
@@ -37,6 +43,8 @@ You can also change an item by index:  my_list[0] = "new value"`,
       id: '3',
       description: 'Print the length of the list using the len() function.',
       hint: 'print(len(fruits))',
+      example: `fruits = ["apple", "banana", "cherry", "date"]
+print(len(fruits))`,
       starterCode: `fruits = ["apple", "banana", "cherry", "date"]\n# Print how many items are in the list\n`,
       validate: (code, output) =>
         /len\s*\(\s*fruits\s*\)/.test(code) &&

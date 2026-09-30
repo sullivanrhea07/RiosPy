@@ -16,6 +16,8 @@ Python has built-in functions:  sum()  min()  max()  len()`,
       id: '1',
       description: 'Print the sum of all numbers in the list `scores`.',
       hint: 'print(sum(scores))',
+      example: `scores = [88, 92, 79, 93, 85]
+print(sum(scores))`,
       starterCode: `scores = [88, 92, 79, 93, 85]\n# Print the total\n`,
       validate: (code, output) =>
         /sum\s*\(\s*scores\s*\)/.test(code) &&
@@ -25,6 +27,9 @@ Python has built-in functions:  sum()  min()  max()  len()`,
       id: '2',
       description: 'Calculate and print the average of the scores (sum divided by count).',
       hint: 'average = sum(scores) / len(scores)\nprint(average)',
+      example: `scores = [88, 92, 79, 93, 85]
+average = sum(scores) / len(scores)
+print(average)`,
       starterCode: `scores = [88, 92, 79, 93, 85]\n# Print the average\n`,
       validate: (code, output) =>
         /sum\s*\(/.test(code) &&
@@ -35,6 +40,9 @@ Python has built-in functions:  sum()  min()  max()  len()`,
       id: '3',
       description: 'Print both the minimum and the maximum score, each on its own line.',
       hint: 'print(min(scores))\nprint(max(scores))',
+      example: `scores = [88, 92, 79, 93, 85]
+print(min(scores))
+print(max(scores))`,
       starterCode: `scores = [88, 92, 79, 93, 85]\n# Print min and max\n`,
       validate: (code, output) =>
         /min\s*\(/.test(code) &&

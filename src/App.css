@@ -227,3 +227,38 @@
   gap: 0.5rem;
   color: #94a3b8;
 }
+
+.example-box {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.example-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.example-code {
+  padding: 0.75rem;
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #a5f3fc;
+  white-space: pre-wrap;
+  margin: 0;
+  overflow-x: auto;
+}
+
+button.small {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+}

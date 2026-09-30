@@ -18,6 +18,7 @@ function App() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
   const [showHint, setShowHint] = useState(false);
+  const [showExample, setShowExample] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
 
   const { loading, error: pyodideError, runPython } = usePyodide();
@@ -32,6 +33,7 @@ function App() {
     setError(null);
     setSuccessMessage(null);
     setShowHint(false);
+    setShowExample(false);
   }, [currentLessonId, currentTaskIndex, task.starterCode]);
 
   const handleRun = useCallback(async () => {
@@ -53,6 +55,13 @@ function App() {
 
   const handleReset = () => {
     setCode(task.starterCode);
+    setOutput('');
+    setError(null);
+    setSuccessMessage(null);
+  };
+
+  const handleUseExample = () => {
+    setCode(task.example);
     setOutput('');
     setError(null);
     setSuccessMessage(null);
@@ -115,7 +124,10 @@ function App() {
             currentTaskIndex={currentTaskIndex}
             completedTasks={completedTasks}
             showHint={showHint}
+            showExample={showExample}
             onShowHint={() => setShowHint(true)}
+            onShowExample={() => setShowExample(true)}
+            onUseExample={handleUseExample}
             onNextTask={() => setCurrentTaskIndex((i) => i + 1)}
           />
           <Terminal

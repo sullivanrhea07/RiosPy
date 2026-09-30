@@ -23,6 +23,9 @@ You can also loop over a range of numbers:
       id: '1',
       description: 'Loop through the list of fruits and print each one on its own line.',
       hint: 'for fruit in fruits:\n    print(fruit)',
+      example: `fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)`,
       starterCode: `fruits = ["apple", "banana", "cherry"]\n# Print each fruit\n`,
       validate: (code, output) =>
         /for\s+\w+\s+in\s+fruits\s*:/.test(code) &&
@@ -34,6 +37,8 @@ You can also loop over a range of numbers:
       id: '2',
       description: 'Use range() to print the numbers 1 through 5 (inclusive), each on a new line.',
       hint: 'for i in range(1, 6):\n    print(i)',
+      example: `for i in range(1, 6):
+    print(i)`,
       starterCode: `# Print numbers 1 to 5\n`,
       validate: (code, output) =>
         /for\s+\w+\s+in\s+range\s*\(/.test(code) &&
@@ -45,6 +50,8 @@ You can also loop over a range of numbers:
       id: '3',
       description: 'Print only the even numbers from 0 to 10 (inclusive) using range with a step.',
       hint: 'for i in range(0, 11, 2):\n    print(i)',
+      example: `for i in range(0, 11, 2):
+    print(i)`,
       starterCode: `# Print even numbers from 0 to 10\n`,
       validate: (code, output) =>
         /range\s*\(/.test(code) &&
