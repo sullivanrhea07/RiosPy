@@ -235,6 +235,37 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.stdin-panel {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #111c2e;
+  border-bottom: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.stdin-area {
+  width: 100%;
+  min-height: 2.5rem;
+  max-height: 5rem;
+  padding: 0.45rem 0.6rem;
+  resize: vertical;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  background: #0f172a;
+  color: #e2e8f0;
+  font: 0.8rem/1.4 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  outline: none;
+}
+
+.stdin-area:focus {
+  border-color: #3b82f6;
+}
+
 .right-panel {
   display: flex;
   flex-direction: column;
@@ -512,6 +543,12 @@ button.small {
   .code-area {
     font-size: 0.85rem;
     padding: 0.7rem;
+  }
+
+  .stdin-panel {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding: 0.45rem 0.65rem;
   }
 
   .editor-toolbar button {

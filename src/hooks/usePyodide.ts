@@ -40,17 +40,19 @@ export function usePyodide() {
   }, []);
 
   const runPython = useCallback(
-    async (code: string): Promise<{ output: string; error: string | null }> => {
+    async (code: string, stdin = ''): Promise<{ output: string; error: string | null }> => {
       if (!pyodide) {
         return { output: '', error: 'Python runtime not ready' };
       }
 
       try {
-        // Capture stdout
+        pyodide.globals.set('_copilot_stdin', stdin);
         pyodide.runPython(`
 import sys
 from io import StringIO
 sys.stdout = StringIO()
+sys.stdin = StringIO(_copilot_stdin)
+del _copilot_stdin
         `);
 
         await pyodide.runPythonAsync(`exec(${JSON.stringify(code)}, {})`);

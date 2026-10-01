@@ -23,6 +23,7 @@ function App() {
   const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [code, setCode] = useState('');
+  const [stdin, setStdin] = useState('');
   const [output, setOutput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -32,6 +33,7 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [playgroundCode, setPlaygroundCode] = useState('print("Hello, world!")\n');
+  const [playgroundStdin, setPlaygroundStdin] = useState('');
   const [playgroundOutput, setPlaygroundOutput] = useState('');
   const [playgroundError, setPlaygroundError] = useState<string | null>(null);
   const [playgroundIsRunning, setPlaygroundIsRunning] = useState(false);
@@ -44,6 +46,7 @@ function App() {
   // Load starter code when lesson or task changes
   useEffect(() => {
     setCode(task.starterCode);
+    setStdin('');
     setOutput('');
     setError(null);
     setSuccessMessage(null);
@@ -57,7 +60,7 @@ function App() {
     setSuccessMessage(null);
 
     const expected = await runPython(task.example);
-    const result = await runPython(code);
+    const result = await runPython(code, stdin);
     setOutput(result.output);
     setError(result.error ?? (expected.error ? 'Could not check this task.' : null));
 
@@ -71,10 +74,11 @@ function App() {
     }
 
     setIsRunning(false);
-  }, [code, runPython, task]);
+  }, [code, runPython, stdin, task]);
 
   const handleReset = () => {
     setCode(task.starterCode);
+    setStdin('');
     setOutput('');
     setError(null);
     setSuccessMessage(null);
@@ -108,7 +112,7 @@ function App() {
   const handleRunPlayground = async () => {
     setPlaygroundIsRunning(true);
     setPlaygroundError(null);
-    const result = await runPython(playgroundCode);
+    const result = await runPython(playgroundCode, playgroundStdin);
     setPlaygroundOutput(result.output);
     setPlaygroundError(result.error);
     setPlaygroundIsRunning(false);
@@ -116,6 +120,7 @@ function App() {
 
   const handleResetPlayground = () => {
     setPlaygroundCode('');
+    setPlaygroundStdin('');
     setPlaygroundOutput('');
     setPlaygroundError(null);
   };
@@ -173,6 +178,8 @@ function App() {
               <PythonEditor
                 code={code}
                 onChange={setCode}
+                stdin={stdin}
+                onStdinChange={setStdin}
                 onRun={handleRun}
                 onReset={handleReset}
                 isRunning={isRunning}
@@ -208,6 +215,8 @@ function App() {
             <PythonEditor
               code={playgroundCode}
               onChange={setPlaygroundCode}
+              stdin={playgroundStdin}
+              onStdinChange={setPlaygroundStdin}
               onRun={handleRunPlayground}
               onReset={handleResetPlayground}
               isRunning={playgroundIsRunning}
