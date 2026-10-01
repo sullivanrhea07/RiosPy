@@ -77,6 +77,7 @@ Easy, Moderate, and Hard challenges, including coordinate quadrants, four-bit
 patterns, ATM and date rules, and number algorithms.
 
 Each task has Show Hint and How to (example solution + Use in editor).
+The standalone Playground tab provides an independent Python editor and output panel.
 
 ## License
 

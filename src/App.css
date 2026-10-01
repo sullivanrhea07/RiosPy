@@ -31,7 +31,34 @@
   border-radius: 999px;
   color: #94a3b8;
   white-space: nowrap;
+  margin-left: 0;
+}
+
+.view-switcher {
+  display: flex;
+  gap: 0.25rem;
   margin-left: auto;
+  padding: 0.2rem;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.view-switcher button {
+  background: transparent;
+  color: #94a3b8;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.view-switcher button:hover:not(:disabled) {
+  background: #1e293b;
+}
+
+.view-switcher button.selected {
+  background: #3b82f6;
+  color: white;
 }
 
 .menu-btn {
@@ -55,6 +82,46 @@
   grid-template-columns: 220px 1fr 320px;
   flex: 1;
   overflow: hidden;
+  min-height: 0;
+}
+
+.playground-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 38%);
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.playground-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  min-width: 0;
+  min-height: 0;
+}
+
+.playground-editor h2 {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.playground-editor .editor {
+  min-height: 0;
+}
+
+.playground-output {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #1e293b;
+  border-left: 1px solid #334155;
+}
+
+.playground-output .terminal {
+  flex: 1;
   min-height: 0;
 }
 
@@ -323,6 +390,10 @@ button.small {
   .header h1 {
     font-size: 1rem;
   }
+
+  .playground-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 36%);
+  }
 }
 
 /* ============================================================
@@ -341,6 +412,10 @@ button.small {
     font-size: 0.95rem;
   }
 
+  .view-switcher button {
+    padding: 0.4rem 0.55rem;
+  }
+
   /* Single scrolling column */
   .main-layout {
     display: flex;
@@ -348,6 +423,38 @@ button.small {
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .playground-layout {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .playground-editor {
+    flex: none;
+    height: min(58vh, 560px);
+    min-height: 320px;
+    padding: 0.75rem;
+  }
+
+  .playground-editor .editor {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+  }
+
+  .playground-output {
+    flex: none;
+    height: 240px;
+    border-left: none;
+    border-top: 1px solid #334155;
+  }
+
+  .playground-output .terminal {
+    height: 100%;
   }
 
   /* Sidebar = slide-in drawer */
@@ -458,6 +565,15 @@ button.small {
 
   .header h1 {
     font-size: 0.85rem;
+  }
+
+  .view-switcher {
+    gap: 0;
+  }
+
+  .view-switcher button {
+    padding: 0.35rem 0.4rem;
+    font-size: 0.75rem;
   }
 
   .center {

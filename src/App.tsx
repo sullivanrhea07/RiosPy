@@ -19,6 +19,7 @@ function normalizeOutput(output: string) {
 }
 
 function App() {
+  const [view, setView] = useState<'lessons' | 'playground'>('lessons');
   const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [code, setCode] = useState('');
@@ -30,6 +31,10 @@ function App() {
   const [showExample, setShowExample] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [playgroundCode, setPlaygroundCode] = useState('print("Hello, world!")\n');
+  const [playgroundOutput, setPlaygroundOutput] = useState('');
+  const [playgroundError, setPlaygroundError] = useState<string | null>(null);
+  const [playgroundIsRunning, setPlaygroundIsRunning] = useState(false);
 
   const { loading, error: pyodideError, runPython } = usePyodide();
 
@@ -100,6 +105,21 @@ function App() {
     if (nextLesson) handleSelectLesson(nextLesson.id);
   };
 
+  const handleRunPlayground = async () => {
+    setPlaygroundIsRunning(true);
+    setPlaygroundError(null);
+    const result = await runPython(playgroundCode);
+    setPlaygroundOutput(result.output);
+    setPlaygroundError(result.error);
+    setPlaygroundIsRunning(false);
+  };
+
+  const handleResetPlayground = () => {
+    setPlaygroundCode('');
+    setPlaygroundOutput('');
+    setPlaygroundError(null);
+  };
+
   if (loading) {
     return (
       <div className="loading-screen">
@@ -121,59 +141,83 @@ function App() {
   return (
     <div className="app">
       <Header
-        showMenuButton
+        view={view}
+        onViewChange={(nextView) => {
+          setView(nextView);
+          setSidebarOpen(false);
+        }}
+        showMenuButton={view === 'lessons'}
         onMenuClick={() => setSidebarOpen((o) => !o)}
       />
 
-      {/* Mobile overlay when sidebar is open */}
-      {sidebarOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {view === 'lessons' ? (
+        <>
+          {sidebarOpen && (
+            <div
+              className="sidebar-overlay"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
 
-      <div className="main-layout">
-        <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-          <LessonNavigation
-            lessons={lessons}
-            currentLessonId={currentLessonId}
-            onSelect={handleSelectLesson}
-          />
-        </aside>
+          <div className="main-layout">
+            <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+              <LessonNavigation
+                lessons={lessons}
+                currentLessonId={currentLessonId}
+                onSelect={handleSelectLesson}
+              />
+            </aside>
 
-        <main className="center">
-          <Instructions title={lesson.title} instructions={lesson.instructions} />
-          <PythonEditor
-            code={code}
-            onChange={setCode}
-            onRun={handleRun}
-            onReset={handleReset}
-            isRunning={isRunning}
-          />
+            <main className="center">
+              <Instructions title={lesson.title} instructions={lesson.instructions} />
+              <PythonEditor
+                code={code}
+                onChange={setCode}
+                onRun={handleRun}
+                onReset={handleReset}
+                isRunning={isRunning}
+              />
+            </main>
+
+            <aside className="right-panel">
+              <TaskPanel
+                tasks={lesson.tasks}
+                currentTaskIndex={currentTaskIndex}
+                completedTasks={completedTasks}
+                showHint={showHint}
+                showExample={showExample}
+                onShowHint={() => setShowHint(true)}
+                onShowExample={() => setShowExample(true)}
+                onUseExample={handleUseExample}
+                canAdvance={currentTaskIndex < lesson.tasks.length - 1 || lessons[lessons.length - 1]?.id !== lesson.id}
+                onNextTask={handleAdvanceTask}
+                onSkipTask={handleAdvanceTask}
+              />
+              <Terminal
+                output={output}
+                error={error}
+                successMessage={successMessage}
+              />
+            </aside>
+          </div>
+        </>
+      ) : (
+        <main className="playground-layout">
+          <section className="playground-editor">
+            <h2>Python Playground</h2>
+            <PythonEditor
+              code={playgroundCode}
+              onChange={setPlaygroundCode}
+              onRun={handleRunPlayground}
+              onReset={handleResetPlayground}
+              isRunning={playgroundIsRunning}
+            />
+          </section>
+          <aside className="playground-output">
+            <Terminal output={playgroundOutput} error={playgroundError} />
+          </aside>
         </main>
-
-        <aside className="right-panel">
-          <TaskPanel
-            tasks={lesson.tasks}
-            currentTaskIndex={currentTaskIndex}
-            completedTasks={completedTasks}
-            showHint={showHint}
-            showExample={showExample}
-            onShowHint={() => setShowHint(true)}
-            onShowExample={() => setShowExample(true)}
-            onUseExample={handleUseExample}
-            canAdvance={currentTaskIndex < lesson.tasks.length - 1 || lessons[lessons.length - 1]?.id !== lesson.id}
-            onNextTask={handleAdvanceTask}
-            onSkipTask={handleAdvanceTask}
-          />
-          <Terminal
-            output={output}
-            error={error}
-            successMessage={successMessage}
-          />
-        </aside>
-      </div>
+      )}
     </div>
   );
 }
