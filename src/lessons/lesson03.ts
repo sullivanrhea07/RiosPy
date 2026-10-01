@@ -17,10 +17,10 @@ You can also use negative indexes to count from the end:
   tasks: [
     {
       id: '1',
-      description: 'Create a list called `fruits` that contains at least three string items.',
-      hint: 'fruits = ["apple", "banana", "cherry"]',
-      example: `fruits = ["apple", "banana", "cherry"]`,
-      starterCode: `# Create a list of fruits\n`,
+      description: 'Create a list called `fruits` containing "apple", "banana", and "cherry", then print the list.',
+      hint: 'fruits = ["apple", "banana", "cherry"]\nprint(fruits)',
+      example: `fruits = ["apple", "banana", "cherry"]\nprint(fruits)`,
+      starterCode: `# Create the fruits list and print it\n`,
       validate: (code) => /fruits\s*=\s*\[.*["'].*["'].*\]/.test(code),
     },
     {

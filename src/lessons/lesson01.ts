@@ -11,10 +11,10 @@ print() is the function that shows text (or any value) in the output area.`,
   tasks: [
     {
       id: '1',
-      description: 'Create a variable called `name` and assign it any string value (text inside quotes).',
-      hint: 'name = "Rio"',
-      example: `name = "Rio"`,
-      starterCode: `# Create a variable called name\n`,
+      description: 'Create a variable called `name`, assign it the string "Rio", and print it.',
+      hint: 'name = "Rio"\nprint(name)',
+      example: `name = "Rio"\nprint(name)`,
+      starterCode: `# Create name and print it\n`,
       validate: (code) => /name\s*=\s*["'].*?["']/.test(code),
     },
     {

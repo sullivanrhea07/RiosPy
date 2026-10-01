@@ -53,7 +53,7 @@ from io import StringIO
 sys.stdout = StringIO()
         `);
 
-        await pyodide.runPythonAsync(code);
+        await pyodide.runPythonAsync(`exec(${JSON.stringify(code)}, {})`);
 
         const output = pyodide.runPython('sys.stdout.getvalue()');
         return { output: String(output), error: null };

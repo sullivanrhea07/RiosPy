@@ -9,6 +9,15 @@ import { lessons } from './lessons';
 import { usePyodide } from './hooks/usePyodide';
 import './App.css';
 
+function normalizeOutput(output: string) {
+  return output
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trimEnd())
+    .join('\n')
+    .trim();
+}
+
 function App() {
   const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
@@ -42,13 +51,18 @@ function App() {
     setError(null);
     setSuccessMessage(null);
 
+    const expected = await runPython(task.example);
     const result = await runPython(code);
     setOutput(result.output);
-    setError(result.error);
+    setError(result.error ?? (expected.error ? 'Could not check this task.' : null));
 
-    if (!result.error && task.validate(code, result.output)) {
+    if (
+      !result.error &&
+      !expected.error &&
+      normalizeOutput(result.output) === normalizeOutput(expected.output)
+    ) {
       setCompletedTasks((prev) => new Set(prev).add(task.id));
-      setSuccessMessage('✓ Task completed!');
+      setSuccessMessage('✓ Correct! Task completed.');
     }
 
     setIsRunning(false);
@@ -73,6 +87,17 @@ function App() {
     setCurrentTaskIndex(0);
     setCompletedTasks(new Set());
     setSidebarOpen(false); // close mobile menu after selecting
+  };
+
+  const handleAdvanceTask = () => {
+    if (currentTaskIndex < lesson.tasks.length - 1) {
+      setCurrentTaskIndex((index) => index + 1);
+      return;
+    }
+
+    const lessonIndex = lessons.findIndex((item) => item.id === currentLessonId);
+    const nextLesson = lessons[lessonIndex + 1];
+    if (nextLesson) handleSelectLesson(nextLesson.id);
   };
 
   if (loading) {
@@ -138,7 +163,9 @@ function App() {
             onShowHint={() => setShowHint(true)}
             onShowExample={() => setShowExample(true)}
             onUseExample={handleUseExample}
-            onNextTask={() => setCurrentTaskIndex((i) => i + 1)}
+            canAdvance={currentTaskIndex < lesson.tasks.length - 1 || lessons[lessons.length - 1]?.id !== lesson.id}
+            onNextTask={handleAdvanceTask}
+            onSkipTask={handleAdvanceTask}
           />
           <Terminal
             output={output}

@@ -6,10 +6,12 @@ interface Props {
   completedTasks: Set<string>;
   showHint: boolean;
   showExample: boolean;
+  canAdvance: boolean;
   onShowHint: () => void;
   onShowExample: () => void;
   onUseExample: () => void;
   onNextTask: () => void;
+  onSkipTask: () => void;
 }
 
 export function TaskPanel({
@@ -18,10 +20,12 @@ export function TaskPanel({
   completedTasks,
   showHint,
   showExample,
+  canAdvance,
   onShowHint,
   onShowExample,
   onUseExample,
   onNextTask,
+  onSkipTask,
 }: Props) {
   const task = tasks[currentTaskIndex];
   if (!task) return null;
@@ -62,8 +66,11 @@ export function TaskPanel({
             How to
           </button>
         )}
-        {isCompleted && !isLast && (
+        {canAdvance && isCompleted && (
           <button onClick={onNextTask}>Next Task →</button>
+        )}
+        {canAdvance && !isCompleted && (
+          <button onClick={onSkipTask} className="secondary">Skip Task →</button>
         )}
         {isCompleted && isLast && (
           <p className="success">🎉 Lesson complete!</p>
