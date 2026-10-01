@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Header } from './components/Header';
 import { LessonNavigation } from './components/LessonNavigation';
 import { Instructions } from './components/Instructions';
@@ -23,8 +23,7 @@ function App() {
   const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [code, setCode] = useState('');
-  const [stdin, setStdin] = useState('');
-  const [output, setOutput] = useState('');
+  const [terminalLog, setTerminalLog] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
@@ -33,10 +32,11 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [playgroundCode, setPlaygroundCode] = useState('print("Hello, world!")\n');
-  const [playgroundStdin, setPlaygroundStdin] = useState('');
-  const [playgroundOutput, setPlaygroundOutput] = useState('');
   const [playgroundError, setPlaygroundError] = useState<string | null>(null);
   const [playgroundIsRunning, setPlaygroundIsRunning] = useState(false);
+  const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
+  const [terminalInputValue, setTerminalInputValue] = useState('');
+  const inputResolver = useRef<((value: string) => void) | null>(null);
 
   const { loading, error: pyodideError, runPython } = usePyodide();
 
@@ -46,22 +46,42 @@ function App() {
   // Load starter code when lesson or task changes
   useEffect(() => {
     setCode(task.starterCode);
-    setStdin('');
-    setOutput('');
     setError(null);
     setSuccessMessage(null);
     setShowHint(false);
     setShowExample(false);
   }, [currentLessonId, currentTaskIndex, task.starterCode]);
 
+  const requestTerminalInput = useCallback((prompt: string) =>
+    new Promise<string>((resolve) => {
+      inputResolver.current = resolve;
+      setTerminalInputValue('');
+      setTerminalLog((log) => `${log}${prompt}`);
+      setPendingPrompt(prompt);
+    }), []);
+
+  const handleSubmitInput = () => {
+    const resolve = inputResolver.current;
+    if (!resolve) return;
+
+    const value = terminalInputValue;
+    setTerminalLog((log) => `${log}${value}\n`);
+    inputResolver.current = null;
+    setPendingPrompt(null);
+    setTerminalInputValue('');
+    resolve(value);
+  };
+
   const handleRun = useCallback(async () => {
     setIsRunning(true);
     setError(null);
     setSuccessMessage(null);
+    setTerminalLog('');
 
     const expected = await runPython(task.example);
-    const result = await runPython(code, stdin);
-    setOutput(result.output);
+    const result = await runPython(code, requestTerminalInput, (chunk) =>
+      setTerminalLog((log) => log + chunk),
+    );
     setError(result.error ?? (expected.error ? 'Could not check this task.' : null));
 
     if (
@@ -74,19 +94,18 @@ function App() {
     }
 
     setIsRunning(false);
-  }, [code, runPython, stdin, task]);
+  }, [code, requestTerminalInput, runPython, task]);
 
   const handleReset = () => {
     setCode(task.starterCode);
-    setStdin('');
-    setOutput('');
+    setTerminalLog('');
     setError(null);
     setSuccessMessage(null);
   };
 
   const handleUseExample = () => {
     setCode(task.example);
-    setOutput('');
+    setTerminalLog('');
     setError(null);
     setSuccessMessage(null);
   };
@@ -112,16 +131,17 @@ function App() {
   const handleRunPlayground = async () => {
     setPlaygroundIsRunning(true);
     setPlaygroundError(null);
-    const result = await runPython(playgroundCode, playgroundStdin);
-    setPlaygroundOutput(result.output);
+    setTerminalLog('');
+    const result = await runPython(playgroundCode, requestTerminalInput, (chunk) =>
+      setTerminalLog((log) => log + chunk),
+    );
     setPlaygroundError(result.error);
     setPlaygroundIsRunning(false);
   };
 
   const handleResetPlayground = () => {
     setPlaygroundCode('');
-    setPlaygroundStdin('');
-    setPlaygroundOutput('');
+    setTerminalLog('');
     setPlaygroundError(null);
   };
 
@@ -178,8 +198,6 @@ function App() {
               <PythonEditor
                 code={code}
                 onChange={setCode}
-                stdin={stdin}
-                onStdinChange={setStdin}
                 onRun={handleRun}
                 onReset={handleReset}
                 isRunning={isRunning}
@@ -201,9 +219,13 @@ function App() {
                 onSkipTask={handleAdvanceTask}
               />
               <Terminal
-                output={output}
+                output={terminalLog}
                 error={error}
                 successMessage={successMessage}
+                pendingPrompt={pendingPrompt}
+                inputValue={terminalInputValue}
+                onInputChange={setTerminalInputValue}
+                onSubmitInput={handleSubmitInput}
               />
             </aside>
           </div>
@@ -215,15 +237,20 @@ function App() {
             <PythonEditor
               code={playgroundCode}
               onChange={setPlaygroundCode}
-              stdin={playgroundStdin}
-              onStdinChange={setPlaygroundStdin}
               onRun={handleRunPlayground}
               onReset={handleResetPlayground}
               isRunning={playgroundIsRunning}
             />
           </section>
           <aside className="playground-output">
-            <Terminal output={playgroundOutput} error={playgroundError} />
+            <Terminal
+              output={terminalLog}
+              error={playgroundError}
+              pendingPrompt={pendingPrompt}
+              inputValue={terminalInputValue}
+              onInputChange={setTerminalInputValue}
+              onSubmitInput={handleSubmitInput}
+            />
           </aside>
         </main>
       )}
