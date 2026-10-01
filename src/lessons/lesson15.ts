@@ -8,7 +8,7 @@ export const lesson15: Lesson = {
 Example – a list of dictionaries:
 
   students = [
-      {"name": "Alex", "score": 92},
+      {"name": "Rio", "score": 92},
       {"name": "Sam",  "score": 85},
       {"name": "Jordan", "score": 88}
   ]
@@ -20,21 +20,21 @@ You can loop through the list and access each dictionary’s keys.`,
       description: 'Loop through the list of students and print each student’s name.',
       hint: 'for student in students:\n    print(student["name"])',
       example: `students = [
-    {"name": "Alex", "score": 92},
+    {"name": "Rio", "score": 92},
     {"name": "Sam", "score": 85},
     {"name": "Jordan", "score": 88}
 ]
 for student in students:
     print(student["name"])`,
       starterCode: `students = [
-    {"name": "Alex", "score": 92},
+    {"name": "Rio", "score": 92},
     {"name": "Sam", "score": 85},
     {"name": "Jordan", "score": 88}
 ]
 # Print each name\n`,
       validate: (code, output) =>
         /for\s+\w+\s+in\s+students\s*:/.test(code) &&
-        output.toLowerCase().includes('alex') &&
+        output.toLowerCase().includes('Rio') &&
         output.toLowerCase().includes('sam') &&
         output.toLowerCase().includes('jordan'),
     },
@@ -43,7 +43,7 @@ for student in students:
       description: 'Print only the names of students who scored 90 or higher.',
       hint: 'for student in students:\n    if student["score"] >= 90:\n        print(student["name"])',
       example: `students = [
-    {"name": "Alex", "score": 92},
+    {"name": "Rio", "score": 92},
     {"name": "Sam", "score": 85},
     {"name": "Jordan", "score": 88}
 ]
@@ -51,7 +51,7 @@ for student in students:
     if student["score"] >= 90:
         print(student["name"])`,
       starterCode: `students = [
-    {"name": "Alex", "score": 92},
+    {"name": "Rio", "score": 92},
     {"name": "Sam", "score": 85},
     {"name": "Jordan", "score": 88}
 ]
@@ -59,7 +59,7 @@ for student in students:
       validate: (code, output) =>
         /if\s+/.test(code) &&
         /score/.test(code) &&
-        output.toLowerCase().includes('alex') &&
+        output.toLowerCase().includes('Rio') &&
         !output.toLowerCase().includes('sam'),
     },
   ],

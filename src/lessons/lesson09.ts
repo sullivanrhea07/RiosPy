@@ -9,7 +9,7 @@ export const lesson09: Lesson = {
       """Return a friendly greeting."""
       return "Hello, " + name
 
-  message = greet("Alex")
+  message = greet("Rio")
   print(message)
 
 - def starts the definition
@@ -19,17 +19,17 @@ export const lesson09: Lesson = {
   tasks: [
     {
       id: '1',
-      description: 'Define a function called `greet` that takes one parameter `name` and returns a string "Hello, " followed by the name. Then call it with "Alex" and print the result.',
-      hint: 'def greet(name):\n    return "Hello, " + name\n\nprint(greet("Alex"))',
+      description: 'Define a function called `greet` that takes one parameter `name` and returns a string "Hello, " followed by the name. Then call it with "Rio" and print the result.',
+      hint: 'def greet(name):\n    return "Hello, " + name\n\nprint(greet("Rio"))',
       example: `def greet(name):
     return "Hello, " + name
 
-print(greet("Alex"))`,
+print(greet("Rio"))`,
       starterCode: `# Define greet and call it\n`,
       validate: (code, output) =>
         /def\s+greet\s*\(\s*name\s*\)\s*:/.test(code) &&
         /return\s+/.test(code) &&
-        /hello.*alex/i.test(output),
+        /hello.*Rio/i.test(output),
     },
     {
       id: '2',
