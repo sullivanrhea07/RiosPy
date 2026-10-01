@@ -70,9 +70,11 @@ Then set Pages source to the `gh-pages` branch.
 
 ## Lessons
 
-15 progressive lessons covering variables, math, lists, conditionals,
+18 progressive lessons covering variables, math, lists, conditionals,
 dictionaries, loops, functions, strings, FizzBuzz, temperature conversion,
-list comprehensions, statistics, and nested data.
+list comprehensions, statistics, and nested data. Three practice lessons add
+Easy, Moderate, and Hard challenges, including coordinate quadrants, four-bit
+patterns, ATM and date rules, and number algorithms.
 
 Each task has Show Hint and How to (example solution + Use in editor).
 
