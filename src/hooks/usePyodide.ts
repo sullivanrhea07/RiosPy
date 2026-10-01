@@ -60,9 +60,12 @@ del _copilot_stdin
         const output = pyodide.runPython('sys.stdout.getvalue()');
         return { output: String(output), error: null };
       } catch (err: any) {
+        const message = err.message || String(err);
         return {
           output: '',
-          error: err.message || String(err),
+          error: message.includes('EOFError')
+            ? 'Program input ended before the code finished. Add one line in Program Input for each input() call.'
+            : message,
         };
       }
     },

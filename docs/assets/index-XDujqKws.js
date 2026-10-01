@@ -678,7 +678,7 @@ from io import StringIO
 sys.stdout = StringIO()
 sys.stdin = StringIO(_copilot_stdin)
 del _copilot_stdin
-        `),await e.runPythonAsync(`exec(${JSON.stringify(s)}, {})`);const c=e.runPython("sys.stdout.getvalue()");return{output:String(c),error:null}}catch(c){return{output:"",error:c.message||String(c)}}},[e]);return{pyodide:e,loading:n,error:i,runPython:o}}function qs(e){return e.replace(/\r\n/g,`
+        `),await e.runPythonAsync(`exec(${JSON.stringify(s)}, {})`);const c=e.runPython("sys.stdout.getvalue()");return{output:String(c),error:null}}catch(c){const m=c.message||String(c);return{output:"",error:m.includes("EOFError")?"Program input ended before the code finished. Add one line in Program Input for each input() call.":m}}},[e]);return{pyodide:e,loading:n,error:i,runPython:o}}function qs(e){return e.replace(/\r\n/g,`
 `).split(`
 `).map(t=>t.trimEnd()).join(`
 `).trim()}function cp(){var Bo;const[e,t]=I.useState("lessons"),[n,r]=I.useState(Et[0].id),[i,l]=I.useState(0),[o,s]=I.useState(""),[u,c]=I.useState(""),[m,h]=I.useState(""),[p,y]=I.useState(null),[k,S]=I.useState(null),[O,d]=I.useState(new Set),[a,f]=I.useState(!1),[v,x]=I.useState(!1),[P,_]=I.useState(!1),[z,D]=I.useState(!1),[L,fe]=I.useState(`print("Hello, world!")
